@@ -5,6 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
 // import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Creators as pokemonsActions } from '../store/ducks/pokemons';
@@ -48,27 +49,25 @@ class Main extends React.Component {
   render() {
     const { classes } = this.props;
     const { pokemons } = this.props;
-
-    console.log(pokemons)
     return (
       <>
         <header className={classes.header}>
-          <img src={pokebola} alt="pikacu" className={classes.img} />
+          <img src={pokebola} alt="pikachu" className={classes.img} />
         </header>
         <main className={classes.container}>
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
                 <TableCell className={classes.tableCell}>Nome</TableCell>
-                <TableCell className={classes.tableCell}>Detalhe</TableCell>
+                <TableCell className={classes.tableCell}>Mais detalhes</TableCell>
               </TableRow>
             </TableHead>
-            {pokemons && pokemons.results && pokemons.results.map((el) => {
+            {pokemons && pokemons.data.results && pokemons.data.results.map((el) => {
               return (
-                <TableBody>
+                <TableBody key={Math.random()}>
                   <TableRow>
                     <TableCell className={classes.tableCell}>{el.name}</TableCell>
-                    <TableCell className={classes.tableCell}>{el.url}</TableCell>
+                    <TableCell className={classes.tableCell}><Button component="a" variant="contained" href={el.url} color="primary">Detalhes</Button></TableCell>
                   </TableRow>
                 </TableBody>
               )

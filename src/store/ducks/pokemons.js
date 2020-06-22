@@ -13,7 +13,7 @@ export default function pokemons(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.POKEMON_REQUEST:
       return {
-        ...state
+        ...state, data: {},
       };
     case Types.POKEMON_SUCCESS:
       return {
