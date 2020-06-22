@@ -18,11 +18,9 @@ middlewares.push(sagaMiddleware);
 
 const store = createStore(
   reducers,
-  compose(
-    applyMiddleware(...applyMiddleware(...[])),
-    Reactotron.createEnhancer()
-  )
+  compose(applyMiddleware(...middlewares), Reactotron.createEnhancer())
 );
+
 sagaMiddleware.run(sagas);
 
 export default store;
