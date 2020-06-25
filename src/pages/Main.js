@@ -2,8 +2,6 @@ import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableFooter from '@material-ui/core/TableFooter';
-// import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
@@ -12,8 +10,6 @@ import { Creators as pokemonsActions } from '../store/ducks/pokemons';
 import pokebola from '../image/pokebola.png';
 import { withStyles } from '@material-ui/core/styles';
 import TableHead from '@material-ui/core/TableHead';
-
-
 
 const styles = () => ({
   header: {
@@ -40,15 +36,16 @@ const styles = () => ({
   }
 });
 class Main extends React.Component {
-  state = {};
+  state = {
+    activePage: 0
+  };
 
   componentDidMount() {
     this.props.pokemonRequest();
   }
 
   render() {
-    const { classes } = this.props;
-    const { pokemons } = this.props;
+    const { classes, pokemons } = this.props;
     return (
       <>
         <header className={classes.header}>
@@ -59,36 +56,34 @@ class Main extends React.Component {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.tableCell}>Nome</TableCell>
-                <TableCell className={classes.tableCell}>Mais detalhes</TableCell>
+                <TableCell className={classes.tableCell}>
+                  Mais detalhes
+                </TableCell>
               </TableRow>
             </TableHead>
-            {pokemons && pokemons.data.results && pokemons.data.results.map((el) => {
-              return (
-                <TableBody key={Math.random()}>
-                  <TableRow>
-                    <TableCell className={classes.tableCell}>{el.name}</TableCell>
-                    <TableCell className={classes.tableCell}><Button component="a" variant="contained" href={el.url} color="primary">Detalhes</Button></TableCell>
-                  </TableRow>
-                </TableBody>
-              )
-            })}
-            <TableFooter>
-              <TableRow>
-                {/* <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={1}
-                  rowsPerPage={10}
-                  page={1}
-                  SelectProps={{
-                    native: true
-                  }}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActionsWrapped}
-                /> */}
-              </TableRow>
-            </TableFooter>
+            {pokemons &&
+              pokemons.data.results &&
+              pokemons.data.results.map(el => {
+                return (
+                  <TableBody key={Math.random()}>
+                    <TableRow>
+                      <TableCell className={classes.tableCell}>
+                        {el.name}
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <Button
+                          component="a"
+                          variant="contained"
+                          href={el.url}
+                          color="primary"
+                        >
+                          Detalhes
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                );
+              })}
           </Table>
         </main>
       </>
@@ -96,10 +91,14 @@ class Main extends React.Component {
   }
 }
 const mapStateToProps = state => ({
-  pokemons: state.pokemons
+  pokemons: state.pokemons,
+  page: state.pokemons.page
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(pokemonsActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Main));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Main));

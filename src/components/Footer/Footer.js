@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
@@ -20,15 +21,19 @@ const styles = {
 
 class Footer extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes, count } = this.props;
     return (
       <>
         <footer className={classes.footer}>
-          <p className={classes.span}>Teste</p>
+          {count ? <p className={classes.span}>{`${count} pokemons`}</p> : ''}
         </footer>
       </>
     );
   }
 }
 
-export default withStyles(styles)(Footer);
+const mapStateToProps = state => ({
+  count: state.pokemons.data.count
+});
+
+export default connect(mapStateToProps)(withStyles(styles)(Footer));

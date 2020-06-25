@@ -1,19 +1,18 @@
-
 export const Types = {
   POKEMON_REQUEST: 'pokemons/POKEMON_REQUEST',
-  POKEMON_SUCCESS: 'pokemons/POKEMON_SUCCESS',
+  POKEMON_SUCCESS: 'pokemons/POKEMON_SUCCESS'
 };
 
-
 const INITIAL_STATE = {
-  data: {},
+  data: {}
 };
 
 export default function pokemons(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.POKEMON_REQUEST:
       return {
-        ...state, data: {},
+        ...state,
+        data: {}
       };
     case Types.POKEMON_SUCCESS:
       return {
@@ -28,14 +27,11 @@ export default function pokemons(state = INITIAL_STATE, action) {
 
 export const Creators = {
   pokemonRequest: () => ({
-    type: Types.POKEMON_REQUEST,
+    type: Types.POKEMON_REQUEST
   }),
 
   pokemonSuccess: data => ({
     type: Types.POKEMON_SUCCESS,
     payload: { data }
-  }),
-
+  })
 };
-
-
