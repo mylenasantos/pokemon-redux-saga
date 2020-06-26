@@ -1,37 +1,16 @@
-export const Types = {
-  POKEMON_REQUEST: 'pokemons/POKEMON_REQUEST',
-  POKEMON_SUCCESS: 'pokemons/POKEMON_SUCCESS'
+import { createActions, createReducer } from 'reduxsauce';
+
+export const { Types, Creators } = createActions({
+  getPokemonRequest: ['api', 'page'],
+  getPokemonSuccess: ['data']
+});
+
+const INITIAL_STATE = { data: {}, page: 0 };
+
+const getPokemonSuccess = (state = INITIAL_STATE, action) => {
+  return { ...state, data: action.data, page: action.page };
 };
 
-const INITIAL_STATE = {
-  data: {}
-};
-
-export default function pokemons(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case Types.POKEMON_REQUEST:
-      return {
-        ...state,
-        data: {}
-      };
-    case Types.POKEMON_SUCCESS:
-      return {
-        ...state,
-        data: action.payload.data
-      };
-
-    default:
-      return state;
-  }
-}
-
-export const Creators = {
-  pokemonRequest: () => ({
-    type: Types.POKEMON_REQUEST
-  }),
-
-  pokemonSuccess: data => ({
-    type: Types.POKEMON_SUCCESS,
-    payload: { data }
-  })
-};
+export default createReducer(INITIAL_STATE, {
+  [Types.GET_POKEMON_SUCCESS]: getPokemonSuccess
+});

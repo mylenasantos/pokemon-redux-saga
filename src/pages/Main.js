@@ -3,8 +3,11 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
+import api from '../services/api';
 import { bindActionCreators } from 'redux';
 import { Creators as pokemonsActions } from '../store/ducks/pokemons';
 import pokebola from '../image/pokebola.png';
@@ -41,11 +44,19 @@ class Main extends React.Component {
   };
 
   componentDidMount() {
-    this.props.pokemonRequest();
+    let { activePage } = this.state;
+    this.props.pokemonsActions.getPokemonRequest(api, activePage);
   }
+
+  handleChangePage = (event, page) => {
+    this.setState({ activePage: page }, () => {
+      this.props.pokemonsActions.getPokemonRequest(api, this.state.activePage);
+    });
+  };
 
   render() {
     const { classes, pokemons } = this.props;
+    const { activePage } = this.state;
     return (
       <>
         <header className={classes.header}>
@@ -84,19 +95,37 @@ class Main extends React.Component {
                   </TableBody>
                 );
               })}
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={pokemons && pokemons.data.count}
+                  rowsPerPage={10}
+                  page={activePage}
+                  SelectProps={{
+                    native: true
+                  }}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </main>
       </>
     );
   }
 }
-const mapStateToProps = state => ({
-  pokemons: state.pokemons,
-  page: state.pokemons.page
+const mapStateToProps = store => ({
+  pokemons: store.pokemons
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(pokemonsActions, dispatch);
+const mapDispatchToProps = dispatch => {
+  return {
+    pokemonsActions: bindActionCreators(pokemonsActions, dispatch)
+  };
+};
 
 export default connect(
   mapStateToProps,
