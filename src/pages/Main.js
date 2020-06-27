@@ -17,8 +17,7 @@ import TableHead from '@material-ui/core/TableHead';
 const styles = () => ({
   header: {
     display: 'flex',
-    justifyContent: 'center',
-    marginBottom: 40
+    justifyContent: 'center'
   },
   container: {
     display: 'flex',
@@ -40,13 +39,20 @@ const styles = () => ({
 });
 class Main extends React.Component {
   state = {
-    activePage: 0
+    activePage: 0,
+    count: 0,
+    pokemons: []
   };
 
   componentDidMount() {
-    let { activePage } = this.state;
-    this.props.pokemonsActions.getPokemonRequest(api, activePage);
+    this.handleData();
   }
+
+  handleData = () => {
+    const { activePage } = this.state;
+
+    this.props.pokemonsActions.getPokemonRequest(api, activePage);
+  };
 
   handleChangePage = (event, page) => {
     this.setState({ activePage: page }, () => {
@@ -101,7 +107,11 @@ class Main extends React.Component {
                   rowsPerPageOptions={[5, 10, 25]}
                   colSpan={3}
                   count={pokemons && pokemons.data.count}
-                  rowsPerPage={10}
+                  rowsPerPage={
+                    pokemons &&
+                    pokemons.data.results &&
+                    pokemons.data.results.length
+                  }
                   page={activePage}
                   SelectProps={{
                     native: true
